@@ -1,0 +1,82 @@
+# ===========================
+# 🌐 WorldCup API (.NET 8)
+# ===========================
+
+# Build outputs
+bin/
+obj/
+publish/
+dist/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Logs
+*.log
+logs/
+LogFiles/
+
+# IDEs and editors
+.vscode/
+.idea/
+*.swp
+
+# Configuration / secrets
+secrets.json
+*.Development.json
+.env
+*.env.local
+launchSettings.json
+
+# Data files (private datasets and databases)
+data/
+*.db
+*.sqlite
+*.csv
+*.json
+
+# Azure / deployment
+.terraform/
+*.PublishSettings
+*.azurePubxml
+*.pubxml.user
+
+# Test artifacts
+TestResults/
+coverage/
+*.coverage
+*.coveragexml
+
+# NuGet packages
+*.nupkg
+*.snupkg
+.nuget/
+packages/
+# Restore NuGet packages on build
+!src/**/packages.config
+
+# ===========================
+# OS / System Files
+# ===========================
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Linux
+*~
+
+# ===========================
+# ReSharper / JetBrains
+# ===========================
+_ReSharper*/
+*.[Rr]e[Ss]harper
