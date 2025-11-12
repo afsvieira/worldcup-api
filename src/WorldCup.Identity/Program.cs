@@ -6,9 +6,9 @@ using WorldCup.Identity.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Azure AD B2C Authentication
+// Microsoft Entra External ID Authentication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAdB2C"));
+    .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("EntraExternalId"));
 
 // Services
 builder.Services.AddScoped<IUserService, UserService>();

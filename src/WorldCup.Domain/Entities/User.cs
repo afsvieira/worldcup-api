@@ -8,7 +8,7 @@ namespace WorldCup.Domain.Entities;
 public class User
 {
     public Guid Id { get; set; }
-    public string AzureAdB2CId { get; set; } = string.Empty;
+    public string EntraExternalId { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
     public string Name { get; set; } = string.Empty;
     public PlanType PlanType { get; set; } = PlanType.Free;

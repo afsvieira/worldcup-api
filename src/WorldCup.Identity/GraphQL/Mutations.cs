@@ -13,9 +13,9 @@ public class Mutations
         ClaimsPrincipal claimsPrincipal,
         [Service] IUserService userService)
     {
-        var azureId = claimsPrincipal.FindFirst("sub")?.Value 
-                     ?? claimsPrincipal.FindFirst("oid")?.Value
-                     ?? throw new GraphQLException("User ID not found in token");
+        var externalId = claimsPrincipal.FindFirst("sub")?.Value 
+                        ?? claimsPrincipal.FindFirst("oid")?.Value
+                        ?? throw new GraphQLException("User ID not found in token");
         
         var email = claimsPrincipal.FindFirst("emails")?.Value 
                    ?? claimsPrincipal.FindFirst("email")?.Value
@@ -23,7 +23,7 @@ public class Mutations
         
         var name = claimsPrincipal.FindFirst("name")?.Value ?? email;
 
-        return await userService.RegisterUserAsync(azureId, email, name);
+        return await userService.RegisterUserAsync(externalId, email, name);
     }
 
     public async Task<string> GenerateApiKey(
@@ -31,10 +31,10 @@ public class Mutations
         ClaimsPrincipal claimsPrincipal,
         [Service] IApiKeyService apiKeyService)
     {
-        var azureId = claimsPrincipal.FindFirst("sub")?.Value 
-                     ?? claimsPrincipal.FindFirst("oid")?.Value
-                     ?? throw new GraphQLException("User ID not found in token");
+        var externalId = claimsPrincipal.FindFirst("sub")?.Value 
+                        ?? claimsPrincipal.FindFirst("oid")?.Value
+                        ?? throw new GraphQLException("User ID not found in token");
 
-        return await apiKeyService.GenerateApiKeyAsync(azureId, name);
+        return await apiKeyService.GenerateApiKeyAsync(externalId, name);
     }
 }

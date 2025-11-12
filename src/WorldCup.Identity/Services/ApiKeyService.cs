@@ -15,9 +15,9 @@ public class ApiKeyService : IApiKeyService
         _planService = planService;
     }
 
-    public async Task<string> GenerateApiKeyAsync(string azureAdB2CId, string name)
+    public async Task<string> GenerateApiKeyAsync(string entraExternalId, string name)
     {
-        var user = await _userService.GetUserByAzureIdAsync(azureAdB2CId);
+        var user = await _userService.GetUserByExternalIdAsync(entraExternalId);
         if (user == null)
             throw new InvalidOperationException("User not found");
 

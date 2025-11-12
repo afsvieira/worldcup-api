@@ -10,12 +10,12 @@ public interface IUserService
     /// <summary>
     /// Registers a new user or returns existing user
     /// </summary>
-    Task<User> RegisterUserAsync(string azureAdB2CId, string email, string name);
+    Task<User> RegisterUserAsync(string entraExternalId, string email, string name);
     
     /// <summary>
-    /// Gets user by Azure AD B2C identifier
+    /// Gets user by Entra External ID identifier
     /// </summary>
-    Task<User?> GetUserByAzureIdAsync(string azureAdB2CId);
+    Task<User?> GetUserByExternalIdAsync(string entraExternalId);
     
     /// <summary>
     /// Gets user by internal user ID

@@ -6,16 +6,16 @@ public class UserService : IUserService
 {
     private readonly List<User> _users = new();
 
-    public Task<User> RegisterUserAsync(string azureAdB2CId, string email, string name)
+    public Task<User> RegisterUserAsync(string entraExternalId, string email, string name)
     {
-        var existingUser = _users.FirstOrDefault(u => u.AzureAdB2CId == azureAdB2CId);
+        var existingUser = _users.FirstOrDefault(u => u.EntraExternalId == entraExternalId);
         if (existingUser != null)
             return Task.FromResult(existingUser);
 
         var user = new User
         {
             Id = Guid.NewGuid(),
-            AzureAdB2CId = azureAdB2CId,
+            EntraExternalId = entraExternalId,
             Email = email,
             Name = name,
             CreatedAt = DateTime.UtcNow,
@@ -26,9 +26,9 @@ public class UserService : IUserService
         return Task.FromResult(user);
     }
 
-    public Task<User?> GetUserByAzureIdAsync(string azureAdB2CId)
+    public Task<User?> GetUserByExternalIdAsync(string entraExternalId)
     {
-        var user = _users.FirstOrDefault(u => u.AzureAdB2CId == azureAdB2CId);
+        var user = _users.FirstOrDefault(u => u.EntraExternalId == entraExternalId);
         return Task.FromResult(user);
     }
 

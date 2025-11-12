@@ -1,31 +1,33 @@
-# Azure AD B2C Configuration Guide
+# Microsoft Entra External ID Configuration Guide
 
-## 1. Create Azure AD B2C Tenant
+> **Note**: As of May 1, 2025, Azure AD B2C is no longer available for new sales. This guide uses Microsoft Entra External ID, the official replacement.
+
+## 1. Create Microsoft Entra External ID Tenant
 
 1. Go to Azure Portal
-2. Create a new Azure AD B2C tenant
-3. Note down the tenant name (e.g., `your-tenant.onmicrosoft.com`)
+2. Navigate to **Microsoft Entra External ID**
+3. Create a new External ID tenant
+4. Note down the tenant name (e.g., `your-tenant.ciamlogin.com`)
 
 ## 2. Register Application
 
-1. In your B2C tenant, go to "App registrations"
+1. In your External ID tenant, go to "App registrations"
 2. Click "New registration"
 3. Set name: `WorldCup API Identity`
-4. Set redirect URI: `https://localhost:7001/signin-oidc`
-5. Note down the Application (client) ID
+4. Set supported account types: "Accounts in any identity provider or organizational directory"
+5. Set redirect URI: `https://localhost:7001/signin-oidc`
+6. Note down the Application (client) ID
 
-## 3. Create User Flow
+## 3. Configure External Identity Providers
 
-1. Go to "User flows" in B2C
-2. Click "New user flow"
-3. Select "Sign up and sign in"
-4. Choose "Recommended" version
-5. Name: `B2C_1_signupsignin`
-6. Configure identity providers:
-   - **Google**: Add Google as identity provider
-   - **Microsoft**: Add Microsoft Account as identity provider  
-   - **GitHub**: Add GitHub as identity provider
-7. Configure user attributes and claims:
+1. Go to "Identity providers" in External ID
+2. Add identity providers:
+   - **Google**: Configure Google OAuth 2.0
+   - **Microsoft**: Configure Microsoft Account
+   - **GitHub**: Configure GitHub OAuth
+3. Go to "User flows"
+4. Create "Sign up and sign in" flow
+5. Configure user attributes:
    - Collect: Email Address, Display Name
    - Return: Email Addresses, Display Name, Object ID
 
@@ -35,8 +37,8 @@ Update `appsettings.json` in WorldCup.Identity project:
 
 ```json
 {
-  "AzureAdB2C": {
-    "Instance": "https://your-tenant.b2clogin.com/",
+  "EntraExternalId": {
+    "Instance": "https://your-tenant.ciamlogin.com/",
     "Domain": "your-tenant.onmicrosoft.com", 
     "TenantId": "your-tenant-id",
     "ClientId": "your-client-id",
@@ -49,7 +51,7 @@ Update `appsettings.json` in WorldCup.Identity project:
 
 ```bash
 dotnet user-secrets init --project src/WorldCup.Identity
-dotnet user-secrets set "AzureAdB2C:ClientSecret" "your-client-secret" --project src/WorldCup.Identity
+dotnet user-secrets set "EntraExternalId:ClientSecret" "your-client-secret" --project src/WorldCup.Identity
 ```
 
 ## 6. Test Authentication Flow

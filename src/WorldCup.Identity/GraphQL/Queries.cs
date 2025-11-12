@@ -14,13 +14,13 @@ public class Queries
         ClaimsPrincipal claimsPrincipal,
         [Service] IUserService userService)
     {
-        var azureId = claimsPrincipal.FindFirst("sub")?.Value 
-                     ?? claimsPrincipal.FindFirst("oid")?.Value;
+        var externalId = claimsPrincipal.FindFirst("sub")?.Value 
+                        ?? claimsPrincipal.FindFirst("oid")?.Value;
 
-        if (string.IsNullOrEmpty(azureId))
+        if (string.IsNullOrEmpty(externalId))
             return null;
 
-        return await userService.GetUserByAzureIdAsync(azureId);
+        return await userService.GetUserByExternalIdAsync(externalId);
     }
 
     public IEnumerable<Plan> Plans([Service] IPlanService planService)

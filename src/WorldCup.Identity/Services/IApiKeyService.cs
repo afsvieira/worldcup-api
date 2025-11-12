@@ -8,7 +8,7 @@ public interface IApiKeyService
     /// <summary>
     /// Generates a new API key for the specified user
     /// </summary>
-    Task<string> GenerateApiKeyAsync(string azureAdB2CId, string name);
+    Task<string> GenerateApiKeyAsync(string entraExternalId, string name);
     
     /// <summary>
     /// Validates if an API key is active and valid

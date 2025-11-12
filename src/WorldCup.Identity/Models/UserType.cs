@@ -13,6 +13,6 @@ public class UserType : ObjectType<User>
         descriptor.Field(u => u.CreatedAt);
         descriptor.Field(u => u.IsActive);
         descriptor.Field(u => u.ApiKeys);
-        descriptor.Ignore(u => u.AzureAdB2CId);
+        descriptor.Ignore(u => u.EntraExternalId);
     }
 }
