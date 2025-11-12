@@ -19,7 +19,18 @@ public static class VersioningConfiguration
             options.ApiVersionReader = ApiVersionReader.Combine(
                 new UrlSegmentApiVersionReader()
             );
-        }).AddMvc();
+            options.ReportApiVersions = true;
+        })
+        .AddMvc()
+        .AddApiExplorer(options =>
+        {
+            // Add the versioned API explorer, which adds IApiVersionDescriptionProvider service
+            // Format the version as 'v'major[.minor][-status]
+            options.GroupNameFormat = "'v'VVV";
+            
+            // Substitute the version route parameter in swagger doc
+            options.SubstituteApiVersionInUrl = true;
+        });
 
         return services;
     }

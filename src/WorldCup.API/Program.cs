@@ -1,6 +1,7 @@
 using Serilog;
 using WorldCup.API.Configuration;
 using WorldCup.Shared.Extensions;
+using WorldCup.Infrastructure.Extensions;
 
 // Configure Serilog early in the bootstrap process
 Log.Logger = new LoggerConfiguration()
@@ -23,6 +24,7 @@ try
     // Configure application services
     builder.Services.AddDatabaseConfiguration(builder.Configuration);
     builder.Services.AddIdentityConfiguration();
+    builder.Services.AddWorldCupData(builder.Configuration); // World Cup read-only database
     builder.Services.AddEmailConfiguration(builder.Configuration);
     builder.Services.AddApplicationServices(); // Business logic services
     builder.Services.AddVersioningConfiguration();
