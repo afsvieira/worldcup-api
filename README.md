@@ -88,13 +88,14 @@ The application is configured for automated deployment to Azure App Service usin
 
 - Users log in via **Azure AD B2C**, with social providers: **Google**, **Microsoft**, and **GitHub**
 - After authentication, users interact with the **GraphQL** endpoint to:
-  - Register their developer account
-  - Generate and manage API Keys
+  - Register their developer account (starts with **Free** plan)
+  - Generate and manage API Keys (respects plan limits)
+  - View available subscription plans
 - All REST endpoints require the header:
   ```http
   Authorization: Bearer <API_KEY>
   ```
-- API Keys are encrypted and stored securely in **Azure SQL** and **Key Vault**
+- API Keys are encrypted and stored securely, with generation limits based on subscription plan
 
 ## 📊 API Endpoints
 
@@ -107,8 +108,23 @@ The application is configured for automated deployment to Azure App Service usin
 
 ### GraphQL
 - User registration and authentication
-- API key management
+- API key management (with plan validation)
 - Developer account operations
+- Subscription plan information
+
+## 💳 Subscription Plans
+
+| Feature | Free | Premium | Pro |
+|---------|------|---------|-----|
+| 💲 **Price/month** | $0 | $9.99 CAD | $49.99 CAD |
+| ⚙️ **Requests/day** | 500 | 25,000 | 250,000 |
+| ⚡ **Requests/minute** | 10 | 100 | 1,000 |
+| 📄 **Endpoints** | REST (basic) | All REST | REST + GraphQL |
+| 🔑 **API Keys** | 1 | 3 | 10 |
+
+- **Free Plan**: Perfect for testing and small projects
+- **Premium Plan**: Ideal for production applications with moderate traffic
+- **Pro Plan**: Enterprise-grade access with full GraphQL capabilities
 
 ## 🩺 Health & Versioning
 
