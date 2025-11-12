@@ -1,0 +1,205 @@
+@model WorldCup.API.Models.AccountLayoutViewModel
+
+@{
+    ViewData["Title"] = "Upgrade Plan";
+    ViewData["ActivePage"] = "UpgradePlan";
+    Layout = "~/Views/Shared/_AccountLayout.cshtml";
+}
+
+<!-- Pricing Plans -->
+<div class="row g-4 mb-4">
+    <!-- Free Plan -->
+    <div class="col-lg-4">
+        <div class="card border-0 shadow-sm h-100 @(Model.PlanType == "Free" ? "border-primary" : "")">
+            @if (Model.PlanType == "Free")
+            {
+                <div class="position-absolute top-0 start-50 translate-middle">
+                    <span class="badge bg-primary">Current Plan</span>
+                </div>
+            }
+            <div class="card-body p-4 text-center">
+                <i class="bi bi-box text-success fs-1 mb-3"></i>
+                <h3 class="fw-bold mb-3">Free</h3>
+                <div class="display-4 fw-bold mb-1">$0</div>
+                <p class="text-muted mb-4">per month</p>
+                
+                <ul class="list-unstyled text-start mb-4">
+                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> 1 API Key</li>
+                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> 500 requests/day</li>
+                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> 10 requests/minute</li>
+                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Basic support</li>
+                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> World Cup data access</li>
+                    <li class="mb-2 text-muted"><i class="bi bi-x-circle-fill me-2"></i> Historical data</li>
+                    <li class="mb-2 text-muted"><i class="bi bi-x-circle-fill me-2"></i> Advanced statistics</li>
+                </ul>
+                
+                @if (Model.PlanType == "Free")
+                {
+                    <button class="btn btn-outline-secondary w-100" disabled>
+                        <i class="bi bi-check"></i> Current Plan
+                    </button>
+                }
+                else
+                {
+                    <form asp-action="ChangePlan" method="post">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="planType" value="Free" />
+                        <button type="submit" class="btn btn-outline-primary w-100">
+                            Downgrade to Free
+                        </button>
+                    </form>
+                }
+            </div>
+        </div>
+    </div>
+    
+    <!-- Premium Plan -->
+    <div class="col-lg-4">
+        <div class="card border-0 shadow-lg h-100 @(Model.PlanType == "Premium" ? "border-warning" : "")">
+            @if (Model.PlanType == "Premium")
+            {
+                <div class="position-absolute top-0 start-50 translate-middle">
+                    <span class="badge bg-warning text-dark">Current Plan</span>
+                </div>
+            }
+            else
+            {
+                <div class="position-absolute top-0 start-50 translate-middle">
+                    <span class="badge bg-warning text-dark">Popular</span>
+                </div>
+            }
+            <div class="card-body p-4 text-center">
+                <i class="bi bi-star-fill text-warning fs-1 mb-3"></i>
+                <h3 class="fw-bold mb-3">Premium</h3>
+                <div class="display-4 fw-bold mb-1">$29</div>
+                <p class="text-muted mb-4">per month</p>
+                
+                <ul class="list-unstyled text-start mb-4">
+                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> 3 API Keys</li>
+                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> 25,000 requests/day</li>
+                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> 100 requests/minute</li>
+                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Priority support</li>
+                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> World Cup data access</li>
+                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Historical data (5 years)</li>
+                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Advanced statistics</li>
+                </ul>
+                
+                @if (Model.PlanType == "Premium")
+                {
+                    <button class="btn btn-warning w-100" disabled>
+                        <i class="bi bi-check"></i> Current Plan
+                    </button>
+                }
+                else
+                {
+                    <form asp-action="Checkout" method="post">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="planType" value="Premium" />
+                        <button type="submit" class="btn btn-warning text-dark w-100">
+                            <i class="bi bi-cart-check"></i> Upgrade to Premium
+                        </button>
+                    </form>
+                }
+            </div>
+        </div>
+    </div>
+    
+    <!-- Pro Plan -->
+    <div class="col-lg-4">
+        <div class="card border-0 shadow-sm h-100 @(Model.PlanType == "Pro" ? "border-primary" : "")">
+            @if (Model.PlanType == "Pro")
+            {
+                <div class="position-absolute top-0 start-50 translate-middle">
+                    <span class="badge bg-primary">Current Plan</span>
+                </div>
+            }
+            <div class="card-body p-4 text-center">
+                <i class="bi bi-rocket-takeoff-fill text-primary fs-1 mb-3"></i>
+                <h3 class="fw-bold mb-3">Pro</h3>
+                <div class="display-4 fw-bold mb-1">$99</div>
+                <p class="text-muted mb-4">per month</p>
+                
+                <ul class="list-unstyled text-start mb-4">
+                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> 10 API Keys</li>
+                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> 250,000 requests/day</li>
+                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> 1,000 requests/minute</li>
+                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> 24/7 Premium support</li>
+                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> World Cup data access</li>
+                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Unlimited historical data</li>
+                    <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Advanced statistics & analytics</li>
+                </ul>
+                
+                @if (Model.PlanType == "Pro")
+                {
+                    <button class="btn btn-primary w-100" disabled>
+                        <i class="bi bi-check"></i> Current Plan
+                    </button>
+                }
+                else
+                {
+                    <form asp-action="Checkout" method="post">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="planType" value="Pro" />
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="bi bi-rocket-takeoff"></i> Upgrade to Pro
+                        </button>
+                    </form>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Payment Information -->
+<div class="card border-0 shadow-sm">
+    <div class="card-header bg-white">
+        <h4 class="mb-0 fw-bold">
+            <i class="bi bi-credit-card text-primary"></i> Payment Information
+        </h4>
+    </div>
+    <div class="card-body p-4">
+        <div class="alert alert-warning border-warning mb-4">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            <strong>Coming Soon!</strong> PayPal integration is under development.
+        </div>
+        
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <div class="d-flex align-items-center">
+                    <i class="bi bi-shield-check text-success fs-3 me-3"></i>
+                    <div>
+                        <h6 class="fw-bold mb-1">Secure Payment</h6>
+                        <p class="text-muted small mb-0">Your payment information is encrypted and secure</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <div class="d-flex align-items-center">
+                    <i class="bi bi-arrow-repeat text-primary fs-3 me-3"></i>
+                    <div>
+                        <h6 class="fw-bold mb-1">Cancel Anytime</h6>
+                        <p class="text-muted small mb-0">No long-term contracts, cancel whenever you want</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <div class="d-flex align-items-center">
+                    <i class="bi bi-clock-history text-info fs-3 me-3"></i>
+                    <div>
+                        <h6 class="fw-bold mb-1">Instant Activation</h6>
+                        <p class="text-muted small mb-0">Your upgrade is applied immediately after payment</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <div class="d-flex align-items-center">
+                    <i class="bi bi-headset text-warning fs-3 me-3"></i>
+                    <div>
+                        <h6 class="fw-bold mb-1">24/7 Support</h6>
+                        <p class="text-muted small mb-0">Our team is here to help with any questions</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

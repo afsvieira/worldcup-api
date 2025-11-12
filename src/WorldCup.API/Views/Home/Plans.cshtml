@@ -1,0 +1,356 @@
+@{
+    ViewData["Title"] = "Pricing Plans";
+}
+
+<!-- Hero Section -->
+<section class="hero-section bg-dark text-white py-5">
+    <div class="container py-5 text-center">
+        <h1 class="display-4 fw-bold mb-3">
+            <i class="bi bi-credit-card text-warning"></i>
+            Pricing Plans
+        </h1>
+        <p class="lead mb-0">
+            Choose the plan that fits your needs. All plans include access to our comprehensive World Cup data.
+        </p>
+    </div>
+</section>
+
+<!-- Pricing Cards Section -->
+<section class="pricing-section py-5">
+    <div class="container py-5">
+        <div class="row g-4 justify-content-center">
+            <!-- Free Plan -->
+            <div class="col-lg-4 col-md-6">
+                <div class="card border-0 shadow h-100">
+                    <div class="card-body p-4 d-flex flex-column">
+                        <div class="text-center mb-4">
+                            <h3 class="card-title fw-bold mb-3">Free</h3>
+                            <div class="display-4 fw-bold mb-2">
+                                $0
+                                <small class="fs-6 text-muted fw-normal">/month</small>
+                            </div>
+                            <p class="text-muted">Perfect for testing and small projects</p>
+                        </div>
+                        
+                        <ul class="list-unstyled mb-4 flex-grow-1">
+                            <li class="mb-3">
+                                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                <strong>500</strong> requests per day
+                            </li>
+                            <li class="mb-3">
+                                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                <strong>10</strong> requests per minute
+                            </li>
+                            <li class="mb-3">
+                                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                <strong>1</strong> API key
+                            </li>
+                            <li class="mb-3">
+                                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                REST API access (basic endpoints)
+                            </li>
+                            <li class="mb-3">
+                                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                Community support
+                            </li>
+                            <li class="mb-3 text-muted">
+                                <i class="bi bi-x-circle me-2"></i>
+                                Priority support
+                            </li>
+                        </ul>
+                        
+                        @if (User.Identity?.IsAuthenticated == true)
+                        {
+                            <button class="btn btn-outline-primary btn-lg w-100" disabled>
+                                <i class="bi bi-check-lg"></i> Current Plan
+                            </button>
+                        }
+                        else
+                        {
+                            <a asp-controller="Account" asp-action="Register" class="btn btn-outline-primary btn-lg w-100">
+                                <i class="bi bi-person-plus"></i> Get Started
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Premium Plan -->
+            <div class="col-lg-4 col-md-6">
+                <div class="card border-primary border-3 shadow-lg h-100 position-relative">
+                    <div class="position-absolute top-0 start-50 translate-middle">
+                        <span class="badge bg-primary px-3 py-2 rounded-pill">
+                            <i class="bi bi-star-fill"></i> MOST POPULAR
+                        </span>
+                    </div>
+                    <div class="card-body p-4 d-flex flex-column">
+                        <div class="text-center mb-4 mt-3">
+                            <h3 class="card-title fw-bold mb-3">Premium</h3>
+                            <div class="display-4 fw-bold mb-2">
+                                $9.99
+                                <small class="fs-6 text-muted fw-normal">CAD/month</small>
+                            </div>
+                            <p class="text-muted">Ideal for production applications</p>
+                        </div>
+                        
+                        <ul class="list-unstyled mb-4 flex-grow-1">
+                            <li class="mb-3">
+                                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                <strong>25,000</strong> requests per day
+                            </li>
+                            <li class="mb-3">
+                                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                <strong>100</strong> requests per minute
+                            </li>
+                            <li class="mb-3">
+                                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                <strong>3</strong> API keys
+                            </li>
+                            <li class="mb-3">
+                                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                All REST API endpoints
+                            </li>
+                            <li class="mb-3">
+                                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                Email support
+                            </li>
+                        </ul>
+                        
+                        <a href="mailto:afsvieira@afsvieira.com?subject=Premium Plan Inquiry" class="btn btn-primary btn-lg w-100">
+                            <i class="bi bi-envelope"></i> Contact for Upgrade
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Pro Plan -->
+            <div class="col-lg-4 col-md-6">
+                <div class="card border-0 shadow h-100 bg-dark text-white">
+                    <div class="card-body p-4 d-flex flex-column">
+                        <div class="text-center mb-4">
+                            <h3 class="card-title fw-bold mb-3">Pro</h3>
+                            <div class="display-4 fw-bold mb-2">
+                                $49.99
+                                <small class="fs-6 text-muted fw-normal">CAD/month</small>
+                            </div>
+                            <p class="text-muted">Enterprise-grade with premium support</p>
+                        </div>
+                        
+                        <ul class="list-unstyled mb-4 flex-grow-1">
+                            <li class="mb-3">
+                                <i class="bi bi-check-circle-fill text-warning me-2"></i>
+                                <strong>250,000</strong> requests per day
+                            </li>
+                            <li class="mb-3">
+                                <i class="bi bi-check-circle-fill text-warning me-2"></i>
+                                <strong>1,000</strong> requests per minute
+                            </li>
+                            <li class="mb-3">
+                                <i class="bi bi-check-circle-fill text-warning me-2"></i>
+                                <strong>10</strong> API keys
+                            </li>
+                            <li class="mb-3">
+                                <i class="bi bi-check-circle-fill text-warning me-2"></i>
+                                All REST API endpoints
+                            </li>
+                            <li class="mb-3">
+                                <i class="bi bi-check-circle-fill text-warning me-2"></i>
+                                Priority email & chat support
+                            </li>
+                            <li class="mb-3">
+                                <i class="bi bi-check-circle-fill text-warning me-2"></i>
+                                Custom rate limits available
+                            </li>
+                        </ul>
+                        
+                        <a href="mailto:afsvieira@afsvieira.com?subject=Pro Plan Inquiry" class="btn btn-warning btn-lg w-100">
+                            <i class="bi bi-envelope"></i> Contact for Upgrade
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Comparison Table Section -->
+<section class="comparison-section py-5 bg-light">
+    <div class="container py-5">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold mb-3">Detailed Feature Comparison</h2>
+            <p class="lead text-muted">See all the features included in each plan</p>
+        </div>
+        
+        <div class="table-responsive">
+            <table class="table table-bordered bg-white shadow-sm">
+                <thead class="table-dark">
+                    <tr>
+                        <th scope="col" class="py-3">Feature</th>
+                        <th scope="col" class="text-center py-3">Free</th>
+                        <th scope="col" class="text-center py-3 bg-primary text-white">Premium</th>
+                        <th scope="col" class="text-center py-3">Pro</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Price per Month</strong></td>
+                        <td class="text-center">$0</td>
+                        <td class="text-center">$9.99 CAD</td>
+                        <td class="text-center">$49.99 CAD</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Requests per Day</strong></td>
+                        <td class="text-center">500</td>
+                        <td class="text-center">25,000</td>
+                        <td class="text-center">250,000</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Requests per Minute</strong></td>
+                        <td class="text-center">10</td>
+                        <td class="text-center">100</td>
+                        <td class="text-center">1,000</td>
+                    </tr>
+                    <tr>
+                        <td><strong>API Keys</strong></td>
+                        <td class="text-center">1</td>
+                        <td class="text-center">3</td>
+                        <td class="text-center">10</td>
+                    </tr>
+                    <tr>
+                        <td><strong>REST API Access</strong></td>
+                        <td class="text-center"><i class="bi bi-check-circle-fill text-success"></i></td>
+                        <td class="text-center"><i class="bi bi-check-circle-fill text-success"></i></td>
+                        <td class="text-center"><i class="bi bi-check-circle-fill text-success"></i></td>
+                    </tr>
+                    <tr>
+                        <td><strong>All Endpoints</strong></td>
+                        <td class="text-center"><i class="bi bi-dash-circle text-muted"></i></td>
+                        <td class="text-center"><i class="bi bi-check-circle-fill text-success"></i></td>
+                        <td class="text-center"><i class="bi bi-check-circle-fill text-success"></i></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Support Level</strong></td>
+                        <td class="text-center">Community</td>
+                        <td class="text-center">Email</td>
+                        <td class="text-center">Priority (Email & Chat)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Response Time</strong></td>
+                        <td class="text-center">Best effort</td>
+                        <td class="text-center">24-48 hours</td>
+                        <td class="text-center">4-8 hours</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Custom Rate Limits</strong></td>
+                        <td class="text-center"><i class="bi bi-x-circle text-danger"></i></td>
+                        <td class="text-center"><i class="bi bi-x-circle text-danger"></i></td>
+                        <td class="text-center"><i class="bi bi-check-circle-fill text-success"></i></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ Section -->
+<section class="faq-section py-5">
+    <div class="container py-5">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold mb-3">Frequently Asked Questions</h2>
+            <p class="lead text-muted">Have questions? We have answers.</p>
+        </div>
+        
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="accordion" id="faqAccordion">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                                Can I upgrade or downgrade my plan at any time?
+                            </button>
+                        </h2>
+                        <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                Yes! You can upgrade or downgrade your subscription plan at any time. Contact us via email to make changes to your plan.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                                What happens if I exceed my rate limits?
+                            </button>
+                        </h2>
+                        <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                If you exceed your daily or per-minute rate limits, you'll receive a 429 (Too Many Requests) response. 
+                                Your access will be restored automatically when the limit resets. Consider upgrading to a higher plan if you consistently hit your limits.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                                Is there a free trial for paid plans?
+                            </button>
+                        </h2>
+                        <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                The Free plan allows you to test all basic features without a credit card. For Premium and Pro features, 
+                                contact us to discuss a trial period for your specific use case.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
+                                How secure are API keys?
+                            </button>
+                        </h2>
+                        <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                All API keys are encrypted and stored securely in Azure SQL Database. We use industry-standard security practices 
+                                and recommend that you never share your API keys or commit them to version control.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq5">
+                                Can I use the API for commercial projects?
+                            </button>
+                        </h2>
+                        <div id="faq5" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                Yes! All plans, including the Free plan, can be used for commercial projects. The Premium and Pro plans 
+                                are specifically designed for production applications with higher traffic requirements.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section py-5 bg-primary text-white">
+    <div class="container py-5 text-center">
+        <h2 class="display-5 fw-bold mb-3">Ready to Get Started?</h2>
+        <p class="lead mb-4">
+            Start with the Free plan or contact us to discuss Premium and Pro options
+        </p>
+        <div class="d-flex gap-3 justify-content-center flex-wrap">
+            <a asp-controller="Account" asp-action="Register" class="btn btn-light btn-lg">
+                <i class="bi bi-person-plus"></i> Create Free Account
+            </a>
+            <a href="mailto:afsvieira@afsvieira.com?subject=WorldCup API - Pricing Inquiry" class="btn btn-outline-light btn-lg">
+                <i class="bi bi-envelope"></i> Contact Sales
+            </a>
+        </div>
+    </div>
+</section>

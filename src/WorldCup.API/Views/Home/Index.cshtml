@@ -1,0 +1,349 @@
+@{
+    ViewData["Title"] = "Home";
+}
+
+<!-- Hero Section -->
+<section class="hero-section bg-dark text-white py-5">
+    <div class="container py-5">
+        <div class="row align-items-center">
+            <div class="col-lg-7">
+                <h1 class="display-4 fw-bold mb-3">
+                    <i class="bi bi-trophy-fill text-warning"></i>
+                    FIFA World Cup Data API
+                </h1>
+                <p class="lead mb-4">
+                    Access comprehensive historical data from all FIFA World Cup tournaments through a modern, 
+                    well-documented REST API. Built with .NET 9 and deployed on Azure.
+                </p>
+                <div class="d-flex gap-3 flex-wrap">
+                    <a asp-controller="Account" asp-action="Register" class="btn btn-primary btn-lg">
+                        <i class="bi bi-person-plus"></i> Get Started Free
+                    </a>
+                    <a href="/swagger" class="btn btn-outline-light btn-lg" target="_blank">
+                        <i class="bi bi-code-square"></i> API Reference
+                    </a>
+                    <a asp-controller="Home" asp-action="Documentation" class="btn btn-outline-light btn-lg">
+                        <i class="bi bi-book"></i> Documentation
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-5 text-center mt-4 mt-lg-0">
+                <div class="code-preview bg-black p-4 rounded shadow">
+                    <pre class="text-start text-light mb-0"><code>curl -X GET "https://api.worldcup.com/api/v1/tournaments" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+
+{
+  "data": [
+    {
+      "id": 1,
+      "year": 2022,
+      "hostCountry": "Qatar",
+      "winner": "Argentina"
+    }
+  ]
+}</code></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="features-section py-5">
+    <div class="container py-5">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold mb-3">Why Choose WorldCup API?</h2>
+            <p class="lead text-muted">A powerful, reliable, and easy-to-use API for football enthusiasts and developers</p>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon bg-primary bg-gradient text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                            <i class="bi bi-lightning-charge-fill fs-2"></i>
+                        </div>
+                        <h4 class="card-title fw-bold mb-3">Fast & Reliable</h4>
+                        <p class="card-text text-muted">
+                            Built on Azure with global CDN distribution. Get lightning-fast responses with 99.9% uptime SLA.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon bg-success bg-gradient text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                            <i class="bi bi-shield-check fs-2"></i>
+                        </div>
+                        <h4 class="card-title fw-bold mb-3">Secure Authentication</h4>
+                        <p class="card-text text-muted">
+                            Industry-standard API key authentication with rate limiting and usage monitoring.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon bg-warning bg-gradient text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                            <i class="bi bi-file-earmark-text fs-2"></i>
+                        </div>
+                        <h4 class="card-title fw-bold mb-3">Well Documented</h4>
+                        <p class="card-text text-muted">
+                            Comprehensive Swagger/OpenAPI documentation with examples and interactive testing.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon bg-info bg-gradient text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                            <i class="bi bi-globe2 fs-2"></i>
+                        </div>
+                        <h4 class="card-title fw-bold mb-3">RESTful Architecture</h4>
+                        <p class="card-text text-muted">
+                            Clean, predictable REST endpoints following industry best practices and conventions.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon bg-danger bg-gradient text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                            <i class="bi bi-database fs-2"></i>
+                        </div>
+                        <h4 class="card-title fw-bold mb-3">Rich Historical Data</h4>
+                        <p class="card-text text-muted">
+                            Access data from all World Cup tournaments, including matches, teams, players, and statistics.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon bg-secondary bg-gradient text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                            <i class="bi bi-arrow-repeat fs-2"></i>
+                        </div>
+                        <h4 class="card-title fw-bold mb-3">API Versioning</h4>
+                        <p class="card-text text-muted">
+                            Version-controlled endpoints ensure backward compatibility as the API evolves.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- API Endpoints Section -->
+<section class="endpoints-section py-5 bg-light">
+    <div class="container py-5">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold mb-3">Available Endpoints</h2>
+            <p class="lead text-muted">Explore our comprehensive API endpoints</p>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-3">
+                            <span class="badge bg-success me-2">GET</span>
+                            <code class="text-dark">/api/v1/tournaments</code>
+                        </div>
+                        <h5 class="card-title">List Tournaments</h5>
+                        <p class="card-text text-muted">
+                            Retrieve a list of all FIFA World Cup tournaments with year, host country, and winner information.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-3">
+                            <span class="badge bg-success me-2">GET</span>
+                            <code class="text-dark">/api/v1/tournaments/{id}</code>
+                        </div>
+                        <h5 class="card-title">Get Tournament Details</h5>
+                        <p class="card-text text-muted">
+                            Get detailed information about a specific World Cup tournament including all matches and statistics.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-3">
+                            <span class="badge bg-success me-2">GET</span>
+                            <code class="text-dark">/api/v1/teams</code>
+                        </div>
+                        <h5 class="card-title">List Teams</h5>
+                        <p class="card-text text-muted">
+                            Access information about all national teams that have participated in World Cup tournaments.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-3">
+                            <span class="badge bg-success me-2">GET</span>
+                            <code class="text-dark">/api/v1/matches</code>
+                        </div>
+                        <h5 class="card-title">List Matches</h5>
+                        <p class="card-text text-muted">
+                            Search and filter matches with various parameters including tournament, teams, and dates.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-3">
+                            <span class="badge bg-success me-2">GET</span>
+                            <code class="text-dark">/api/v1/players</code>
+                        </div>
+                        <h5 class="card-title">List Players</h5>
+                        <p class="card-text text-muted">
+                            Search through historical player data with filtering by name, country, and tournament.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-3">
+                            <span class="badge bg-primary me-2">GET</span>
+                            <code class="text-dark">/api/v1/health</code>
+                        </div>
+                        <h5 class="card-title">Health Check</h5>
+                        <p class="card-text text-muted">
+                            Monitor API status, uptime, and environment information for reliability checks.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="text-center mt-4">
+            <a href="/swagger" class="btn btn-primary btn-lg" target="_blank">
+                <i class="bi bi-box-arrow-up-right"></i> Explore Full API Documentation
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Quick Start Section -->
+<section class="quickstart-section py-5">
+    <div class="container py-5">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold mb-3">Quick Start Guide</h2>
+            <p class="lead text-muted">Get up and running in minutes</p>
+        </div>
+        
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card border-0 shadow">
+                    <div class="card-body p-4">
+                        <div class="step mb-4">
+                            <div class="d-flex align-items-start">
+                                <div class="step-number bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px; flex-shrink: 0;">
+                                    <strong>1</strong>
+                                </div>
+                                <div>
+                                    <h5 class="fw-bold">Create an Account</h5>
+                                    <p class="text-muted mb-0">
+                                        Sign up for a free account to get started. No credit card required.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="step mb-4">
+                            <div class="d-flex align-items-start">
+                                <div class="step-number bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px; flex-shrink: 0;">
+                                    <strong>2</strong>
+                                </div>
+                                <div>
+                                    <h5 class="fw-bold">Generate an API Key</h5>
+                                    <p class="text-muted mb-0">
+                                        Navigate to your profile and generate your first API key. Keep it secure!
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="step mb-4">
+                            <div class="d-flex align-items-start">
+                                <div class="step-number bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px; flex-shrink: 0;">
+                                    <strong>3</strong>
+                                </div>
+                                <div>
+                                    <h5 class="fw-bold">Make Your First Request</h5>
+                                    <p class="text-muted mb-2">
+                                        Use your API key in the Authorization header to start fetching data.
+                                    </p>
+                                    <div class="bg-dark p-3 rounded">
+                                        <pre class="text-light mb-0 small"><code>curl -X GET "https://api.worldcup.com/api/v1/tournaments" \
+  -H "Authorization: Bearer YOUR_API_KEY"</code></pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="step">
+                            <div class="d-flex align-items-start">
+                                <div class="step-number bg-success text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px; flex-shrink: 0;">
+                                    <i class="bi bi-check-lg"></i>
+                                </div>
+                                <div>
+                                    <h5 class="fw-bold">Start Building!</h5>
+                                    <p class="text-muted mb-0">
+                                        You're all set! Check out our documentation for more advanced features and examples.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section py-5 bg-primary text-white">
+    <div class="container py-5 text-center">
+        <h2 class="display-5 fw-bold mb-3">Ready to Get Started?</h2>
+        <p class="lead mb-4">
+            Join developers worldwide using WorldCup API to build amazing applications
+        </p>
+        <div class="d-flex gap-3 justify-content-center flex-wrap">
+            <a asp-controller="Account" asp-action="Register" class="btn btn-light btn-lg">
+                <i class="bi bi-person-plus"></i> Create Free Account
+            </a>
+            <a asp-controller="Home" asp-action="Plans" class="btn btn-outline-light btn-lg">
+                <i class="bi bi-credit-card"></i> View Pricing Plans
+            </a>
+        </div>
+    </div>
+</section>

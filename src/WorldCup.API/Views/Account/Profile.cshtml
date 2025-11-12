@@ -1,0 +1,186 @@
+@model WorldCup.API.Models.ProfileViewModel
+
+@{
+    ViewData["Title"] = "My Profile";
+    ViewData["ActivePage"] = "Profile";
+    Layout = "~/Views/Shared/_AccountLayout.cshtml";
+    
+    // Pass data to layout
+    var layoutModel = new WorldCup.API.Models.AccountLayoutViewModel
+    {
+        Email = Model.Email,
+        FirstName = Model.FirstName,
+        LastName = Model.LastName,
+        PlanType = Model.PlanType.ToString(),
+        ApiKeyCount = Model.ApiKeyCount,
+        MaxApiKeys = Model.MaxApiKeys,
+        MemberSince = Model.MemberSince
+    };
+    ViewData["LayoutModel"] = layoutModel;
+}
+
+<!-- Account Information -->
+<div class="card border-0 shadow-sm mb-4">
+    <div class="card-header bg-white">
+        <h4 class="mb-0 fw-bold">
+            <i class="bi bi-person-circle text-primary"></i> Account Information
+        </h4>
+    </div>
+    <div class="card-body p-4">
+        <div class="row mb-3">
+            <div class="col-md-4 fw-bold">Name:</div>
+            <div class="col-md-8">@Model.FullName</div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-4 fw-bold">Email:</div>
+            <div class="col-md-8">@Model.Email</div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-4 fw-bold">Member Since:</div>
+            <div class="col-md-8">@Model.MemberSince.ToString("MMMM dd, yyyy")</div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 fw-bold">Email Verified:</div>
+            <div class="col-md-8">
+                @if (Model.EmailConfirmed)
+                {
+                    <span class="badge bg-success">
+                        <i class="bi bi-check-circle-fill"></i> Verified
+                    </span>
+                }
+                else
+                {
+                    <span class="badge bg-warning">
+                        <i class="bi bi-exclamation-triangle-fill"></i> Not Verified
+                    </span>
+                    <form asp-action="ResendConfirmationEmail" method="post" class="d-inline ms-2">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-sm btn-outline-primary">
+                            <i class="bi bi-envelope"></i> Resend Confirmation
+                        </button>
+                    </form>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Current Plan -->
+<div class="card border-0 shadow-sm mb-4">
+    <div class="card-header bg-white">
+        <h4 class="mb-0 fw-bold">
+            <i class="bi bi-credit-card text-primary"></i> Current Plan
+        </h4>
+    </div>
+    <div class="card-body p-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <div>
+                <h5 class="fw-bold mb-1">@Model.PlanType Plan</h5>
+                <p class="text-muted small mb-0">
+                    @if (Model.PlanType == WorldCup.Domain.Enums.PlanType.Free)
+                    {
+                        <span>Free tier with basic features</span>
+                    }
+                    else if (Model.PlanType == WorldCup.Domain.Enums.PlanType.Premium)
+                    {
+                        <span>Premium tier with enhanced features</span>
+                    }
+                    else
+                    {
+                        <span>Professional tier with full access</span>
+                    }
+                </p>
+            </div>
+            @if (Model.PlanType != WorldCup.Domain.Enums.PlanType.Pro)
+            {
+                <a asp-action="UpgradePlan" class="btn btn-primary">
+                    <i class="bi bi-rocket-takeoff"></i> Upgrade
+                </a>
+            }
+        </div>
+        <hr>
+        <div class="row text-center">
+            <div class="col-md-4">
+                <div class="p-3">
+                    <i class="bi bi-key fs-3 text-primary mb-2"></i>
+                    <h6 class="fw-bold mb-1">API Keys</h6>
+                    <p class="text-muted mb-0">@Model.ApiKeyCount / @Model.MaxApiKeys</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="p-3">
+                    <i class="bi bi-graph-up fs-3 text-success mb-2"></i>
+                    <h6 class="fw-bold mb-1">Daily Limit</h6>
+                    <p class="text-muted mb-0">@Model.DailyLimit requests</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="p-3">
+                    <i class="bi bi-speedometer2 fs-3 text-info mb-2"></i>
+                    <h6 class="fw-bold mb-1">Rate Limit</h6>
+                    <p class="text-muted mb-0">
+                        @if (Model.PlanType == WorldCup.Domain.Enums.PlanType.Free)
+                        {
+                            <span>10 req/min</span>
+                        }
+                        else if (Model.PlanType == WorldCup.Domain.Enums.PlanType.Premium)
+                        {
+                            <span>100 req/min</span>
+                        }
+                        else
+                        {
+                            <span>1000 req/min</span>
+                        }
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Usage Statistics -->
+<div class="card border-0 shadow-sm mb-4">
+    <div class="card-header bg-white">
+        <h4 class="mb-0 fw-bold">
+            <i class="bi bi-bar-chart text-primary"></i> Usage Statistics
+        </h4>
+    </div>
+    <div class="card-body p-4">
+        <div class="mb-4">
+            <div class="d-flex justify-content-between mb-2">
+                <span class="fw-bold">Today's Usage</span>
+                <span class="text-muted">@Model.RequestsToday / @Model.DailyLimit requests</span>
+            </div>
+            <div class="progress" style="height: 10px;">
+                <div class="progress-bar @(Model.UsagePercentage > 80 ? "bg-danger" : Model.UsagePercentage > 50 ? "bg-warning" : "bg-success")" 
+                     role="progressbar" 
+                     style="width: @Model.UsagePercentage%"
+                     aria-valuenow="@Model.UsagePercentage" 
+                     aria-valuemin="0" 
+                     aria-valuemax="100">
+                </div>
+            </div>
+        </div>
+        
+        <div class="row text-center">
+            <div class="col-md-4 mb-3">
+                <div class="border rounded p-3">
+                    <h3 class="fw-bold mb-0">@Model.RequestsToday</h3>
+                    <small class="text-muted">Today</small>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="border rounded p-3">
+                    <h3 class="fw-bold mb-0">@Model.RequestsThisWeek</h3>
+                    <small class="text-muted">This Week</small>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="border rounded p-3">
+                    <h3 class="fw-bold mb-0">@Model.RequestsThisMonth</h3>
+                    <small class="text-muted">This Month</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

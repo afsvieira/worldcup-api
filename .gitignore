@@ -38,6 +38,9 @@ data/
 *.csv
 *.json
 
+# Scripts with credentials
+scripts/
+
 # Azure / deployment
 .terraform/
 *.PublishSettings

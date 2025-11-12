@@ -1,0 +1,431 @@
+@{
+    ViewData["Title"] = "Documentation";
+}
+
+<!-- Hero Section -->
+<section class="hero-section bg-dark text-white py-5">
+    <div class="container py-5 text-center">
+        <h1 class="display-4 fw-bold mb-3">
+            <i class="bi bi-book text-warning"></i>
+            API Documentation
+        </h1>
+        <p class="lead mb-0">
+            Complete guide to using the WorldCup API in your applications
+        </p>
+    </div>
+</section>
+
+<!-- Documentation Content -->
+<section class="documentation-section py-5">
+    <div class="container py-5">
+        <div class="row">
+            <!-- Sidebar Navigation -->
+            <div class="col-lg-3 mb-4">
+                <div class="card border-0 shadow-sm sticky-top" style="top: 20px;">
+                    <div class="card-body">
+                        <h6 class="fw-bold mb-3">Contents</h6>
+                        <ul class="list-unstyled">
+                            <li class="mb-2">
+                                <a href="#getting-started" class="text-decoration-none">Getting Started</a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="#authentication" class="text-decoration-none">Authentication</a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="#endpoints" class="text-decoration-none">API Endpoints</a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="#rate-limits" class="text-decoration-none">Rate Limits</a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="#errors" class="text-decoration-none">Error Handling</a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="#examples" class="text-decoration-none">Code Examples</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Main Content -->
+            <div class="col-lg-9">
+                <!-- Getting Started -->
+                <div id="getting-started" class="mb-5">
+                    <h2 class="fw-bold mb-4">Getting Started</h2>
+                    <div class="card border-0 shadow-sm mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">1. Create an Account</h5>
+                            <p class="card-text">
+                                Sign up for a free account at <a asp-controller="Account" asp-action="Register">Registration Page</a> 
+                                to get started with the WorldCup API.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="card border-0 shadow-sm mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">2. Generate an API Key</h5>
+                            <p class="card-text">
+                                After logging in, navigate to your <a asp-controller="Account" asp-action="ApiKeys">API Keys</a> 
+                                page to generate your first API key. Keep this key secure and never share it publicly.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">3. Make Your First Request</h5>
+                            <p class="card-text mb-3">
+                                Use your API key in the Authorization header to make requests:
+                            </p>
+                            <div class="bg-dark p-3 rounded">
+                                <pre class="text-light mb-0"><code>curl -X GET "https://localhost:7001/api/v1/health" \
+  -H "Authorization: Bearer YOUR_API_KEY"</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Authentication -->
+                <div id="authentication" class="mb-5">
+                    <h2 class="fw-bold mb-4">Authentication</h2>
+                    <p class="lead">All API requests require authentication using an API key.</p>
+                    
+                    <div class="alert alert-info">
+                        <i class="bi bi-info-circle-fill me-2"></i>
+                        <strong>Important:</strong> Include your API key in the <code>Authorization</code> header 
+                        with the <code>Bearer</code> prefix.
+                    </div>
+                    
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold mb-3">Request Header</h5>
+                            <div class="bg-dark p-3 rounded">
+                                <pre class="text-light mb-0"><code>Authorization: Bearer YOUR_API_KEY</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- API Endpoints -->
+                <div id="endpoints" class="mb-5">
+                    <h2 class="fw-bold mb-4">API Endpoints</h2>
+                    <p class="lead mb-4">The WorldCup API provides the following endpoints:</p>
+                    
+                    <!-- Health Check -->
+                    <div class="card border-0 shadow-sm mb-3">
+                        <div class="card-header bg-white">
+                            <span class="badge bg-primary me-2">GET</span>
+                            <code>/api/v1/health</code>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">
+                                Check the API health status and get environment information.
+                            </p>
+                            <h6 class="fw-bold mb-2">Response Example:</h6>
+                            <div class="bg-dark p-3 rounded">
+                                <pre class="text-light mb-0 small"><code>{
+  "status": "Healthy",
+  "environment": "Development",
+  "uptime": "00:05:23",
+  "timestamp": "2025-11-12T10:30:00Z"
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Tournaments -->
+                    <div class="card border-0 shadow-sm mb-3">
+                        <div class="card-header bg-white">
+                            <span class="badge bg-success me-2">GET</span>
+                            <code>/api/v1/tournaments</code>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">
+                                Retrieve a list of all FIFA World Cup tournaments.
+                            </p>
+                            <h6 class="fw-bold mb-2">Response Example:</h6>
+                            <div class="bg-dark p-3 rounded">
+                                <pre class="text-light mb-0 small"><code>{
+  "data": [
+    {
+      "id": 1,
+      "year": 2022,
+      "hostCountry": "Qatar",
+      "winner": "Argentina",
+      "runnerUp": "France",
+      "totalMatches": 64
+    }
+  ],
+  "count": 1
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Tournament Details -->
+                    <div class="card border-0 shadow-sm mb-3">
+                        <div class="card-header bg-white">
+                            <span class="badge bg-success me-2">GET</span>
+                            <code>/api/v1/tournaments/{id}</code>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">
+                                Get detailed information about a specific tournament including all matches.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <!-- Teams -->
+                    <div class="card border-0 shadow-sm mb-3">
+                        <div class="card-header bg-white">
+                            <span class="badge bg-success me-2">GET</span>
+                            <code>/api/v1/teams</code>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">
+                                Retrieve information about all national teams that have participated in World Cup tournaments.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <!-- Matches -->
+                    <div class="card border-0 shadow-sm mb-3">
+                        <div class="card-header bg-white">
+                            <span class="badge bg-success me-2">GET</span>
+                            <code>/api/v1/matches</code>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">
+                                Search and filter World Cup matches with various parameters.
+                            </p>
+                            <h6 class="fw-bold mb-2">Query Parameters:</h6>
+                            <ul>
+                                <li><code>tournamentId</code> - Filter by tournament</li>
+                                <li><code>teamId</code> - Filter by team</li>
+                                <li><code>year</code> - Filter by year</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- Players -->
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header bg-white">
+                            <span class="badge bg-success me-2">GET</span>
+                            <code>/api/v1/players</code>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">
+                                Search through historical player data with filtering capabilities.
+                            </p>
+                            <h6 class="fw-bold mb-2">Query Parameters:</h6>
+                            <ul>
+                                <li><code>name</code> - Search by player name</li>
+                                <li><code>country</code> - Filter by country</li>
+                                <li><code>tournamentId</code> - Filter by tournament</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Rate Limits -->
+                <div id="rate-limits" class="mb-5">
+                    <h2 class="fw-bold mb-4">Rate Limits</h2>
+                    <p class="lead mb-4">Rate limits vary by subscription plan:</p>
+                    
+                    <div class="table-responsive">
+                        <table class="table table-bordered bg-white shadow-sm">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Plan</th>
+                                    <th>Requests/Day</th>
+                                    <th>Requests/Minute</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Free</strong></td>
+                                    <td>500</td>
+                                    <td>10</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Premium</strong></td>
+                                    <td>25,000</td>
+                                    <td>100</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Pro</strong></td>
+                                    <td>250,000</td>
+                                    <td>1,000</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="alert alert-warning mt-3">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        When you exceed your rate limit, the API returns a <code>429 Too Many Requests</code> status code.
+                    </div>
+                </div>
+                
+                <!-- Error Handling -->
+                <div id="errors" class="mb-5">
+                    <h2 class="fw-bold mb-4">Error Handling</h2>
+                    <p class="lead mb-4">The API uses standard HTTP status codes to indicate the success or failure of requests.</p>
+                    
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="card border-0 shadow-sm h-100">
+                                <div class="card-body">
+                                    <span class="badge bg-success mb-2">200 OK</span>
+                                    <p class="card-text small mb-0">The request was successful.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card border-0 shadow-sm h-100">
+                                <div class="card-body">
+                                    <span class="badge bg-warning mb-2">400 Bad Request</span>
+                                    <p class="card-text small mb-0">The request was invalid or cannot be served.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card border-0 shadow-sm h-100">
+                                <div class="card-body">
+                                    <span class="badge bg-warning mb-2">401 Unauthorized</span>
+                                    <p class="card-text small mb-0">Authentication failed or API key is missing.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card border-0 shadow-sm h-100">
+                                <div class="card-body">
+                                    <span class="badge bg-warning mb-2">404 Not Found</span>
+                                    <p class="card-text small mb-0">The requested resource was not found.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card border-0 shadow-sm h-100">
+                                <div class="card-body">
+                                    <span class="badge bg-danger mb-2">429 Too Many Requests</span>
+                                    <p class="card-text small mb-0">Rate limit exceeded.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card border-0 shadow-sm h-100">
+                                <div class="card-body">
+                                    <span class="badge bg-danger mb-2">500 Internal Server Error</span>
+                                    <p class="card-text small mb-0">Something went wrong on the server.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Code Examples -->
+                <div id="examples" class="mb-5">
+                    <h2 class="fw-bold mb-4">Code Examples</h2>
+                    
+                    <!-- cURL -->
+                    <div class="card border-0 shadow-sm mb-3">
+                        <div class="card-header bg-white">
+                            <h5 class="mb-0">cURL</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="bg-dark p-3 rounded">
+                                <pre class="text-light mb-0"><code>curl -X GET "https://api.worldcup.com/api/v1/tournaments" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Accept: application/json"</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- JavaScript -->
+                    <div class="card border-0 shadow-sm mb-3">
+                        <div class="card-header bg-white">
+                            <h5 class="mb-0">JavaScript (Fetch API)</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="bg-dark p-3 rounded">
+                                <pre class="text-light mb-0"><code>fetch('https://api.worldcup.com/api/v1/tournaments', {
+  method: 'GET',
+  headers: {
+    'Authorization': 'Bearer YOUR_API_KEY',
+    'Accept': 'application/json'
+  }
+})
+.then(response => response.json())
+.then(data => console.log(data))
+.catch(error => console.error('Error:', error));</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Python -->
+                    <div class="card border-0 shadow-sm mb-3">
+                        <div class="card-header bg-white">
+                            <h5 class="mb-0">Python (requests)</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="bg-dark p-3 rounded">
+                                <pre class="text-light mb-0"><code>import requests
+
+url = "https://api.worldcup.com/api/v1/tournaments"
+headers = {
+    "Authorization": "Bearer YOUR_API_KEY",
+    "Accept": "application/json"
+}
+
+response = requests.get(url, headers=headers)
+data = response.json()
+print(data)</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- C# -->
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header bg-white">
+                            <h5 class="mb-0">C# (HttpClient)</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="bg-dark p-3 rounded">
+                                <pre class="text-light mb-0"><code>using System.Net.Http;
+using System.Net.Http.Headers;
+
+var client = new HttpClient();
+client.DefaultRequestHeaders.Authorization = 
+    new AuthenticationHeaderValue("Bearer", "YOUR_API_KEY");
+
+var response = await client.GetAsync(
+    "https://api.worldcup.com/api/v1/tournaments");
+var data = await response.Content.ReadAsStringAsync();
+Console.WriteLine(data);</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Additional Resources -->
+                <div class="alert alert-primary">
+                    <h5 class="alert-heading">
+                        <i class="bi bi-lightbulb-fill me-2"></i>Need More Help?
+                    </h5>
+                    <p class="mb-2">
+                        For interactive API testing and detailed endpoint documentation, visit our 
+                        <a href="/swagger" class="alert-link" target="_blank">Swagger API Reference</a>.
+                    </p>
+                    <hr>
+                    <p class="mb-0">
+                        For additional support, contact us at 
+                        <a href="mailto:afsvieira@afsvieira.com" class="alert-link">afsvieira@afsvieira.com</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

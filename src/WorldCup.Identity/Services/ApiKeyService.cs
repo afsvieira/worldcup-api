@@ -1,63 +1,145 @@
-using System.Security.Cryptography;
-using WorldCup.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using WorldCup.Application.DTOs.Common;
+using WorldCup.Application.DTOs.Responses;
+using WorldCup.Application.Interfaces;
+using WorldCup.Identity.Data;
+using WorldCup.Identity.Models;
+using WorldCup.Shared.Services;
+using WorldCup.Domain.Enums;
 
 namespace WorldCup.Identity.Services;
 
+/// <summary>
+/// Service for handling API key operations
+/// </summary>
 public class ApiKeyService : IApiKeyService
 {
-    private readonly IUserService _userService;
-    private readonly IPlanService _planService;
-    private readonly List<ApiKey> _apiKeys = new();
+    private readonly ApplicationDbContext _context;
+    private readonly ILogger<ApiKeyService> _logger;
 
-    public ApiKeyService(IUserService userService, IPlanService planService)
+    public ApiKeyService(
+        ApplicationDbContext context,
+        ILogger<ApiKeyService> logger)
     {
-        _userService = userService;
-        _planService = planService;
+        _context = context;
+        _logger = logger;
     }
 
-    public async Task<string> GenerateApiKeyAsync(string entraExternalId, string name)
+    public async Task<IEnumerable<ApiKeyDto>> GetApiKeysAsync(string userId)
     {
-        var user = await _userService.GetUserByExternalIdAsync(entraExternalId);
-        if (user == null)
-            throw new InvalidOperationException("User not found");
+        var apiKeys = await _context.UserApiKeys
+            .Where(k => k.UserId == userId)
+            .OrderByDescending(k => k.CreatedAt)
+            .ToListAsync();
 
-        var currentApiKeyCount = _apiKeys.Count(k => k.UserId == user.Id && k.IsActive);
-        if (!_planService.CanCreateApiKey(user.PlanType, currentApiKeyCount))
-            throw new InvalidOperationException($"API key limit reached for {user.PlanType} plan");
-
-        var apiKey = GenerateSecureApiKey();
-        
-        var apiKeyEntity = new ApiKey
+        return apiKeys.Select(k => new ApiKeyDto
         {
-            Id = Guid.NewGuid(),
-            Key = apiKey,
+            Id = k.Id,
+            Name = k.Name,
+            KeyPreview = ApiKeyGenerator.MaskApiKey(k.KeyHash),
+            IsActive = k.IsActive,
+            CreatedAt = k.CreatedAt
+        });
+    }
+
+    public async Task<ApiKeyCreateResult> CreateApiKeyAsync(string userId, string name)
+    {
+        // Check user exists and get their plan
+        var user = await _context.Users
+            .Include(u => u.ApiKeys)
+            .FirstOrDefaultAsync(u => u.Id == userId);
+
+        if (user == null)
+        {
+            return ApiKeyCreateResult.Failed("User not found.");
+        }
+
+        // Check API key limit
+        var maxApiKeys = GetMaxApiKeysForPlan(user.PlanType);
+        var activeKeyCount = user.ApiKeys.Count(k => k.IsActive);
+
+        if (activeKeyCount >= maxApiKeys)
+        {
+            return ApiKeyCreateResult.Failed($"You have reached the maximum number of API keys ({maxApiKeys}) for your plan.");
+        }
+
+        // Generate new API key
+        var plainKey = ApiKeyGenerator.GenerateApiKey();
+        var keyHash = ApiKeyGenerator.HashApiKey(plainKey);
+
+        var apiKey = new UserApiKey
+        {
+            UserId = userId,
             Name = name,
-            UserId = user.Id,
-            CreatedAt = DateTime.UtcNow,
-            IsActive = true
+            KeyHash = keyHash,
+            IsActive = true,
+            CreatedAt = DateTime.UtcNow
         };
 
-        _apiKeys.Add(apiKeyEntity);
-        return apiKey;
+        _context.UserApiKeys.Add(apiKey);
+        await _context.SaveChangesAsync();
+
+        _logger.LogInformation("API key created for user {UserId}", userId);
+
+        var dto = new ApiKeyDto
+        {
+            Id = apiKey.Id,
+            Name = apiKey.Name,
+            KeyPreview = ApiKeyGenerator.MaskApiKey(plainKey),
+            IsActive = apiKey.IsActive,
+            CreatedAt = apiKey.CreatedAt
+        };
+
+        return ApiKeyCreateResult.Successful(plainKey, dto);
     }
 
-    public Task<bool> ValidateApiKeyAsync(string apiKey)
+    public async Task<ServiceResult> RevokeApiKeyAsync(string userId, Guid apiKeyId)
     {
-        var exists = _apiKeys.Any(k => k.Key == apiKey && k.IsActive);
-        return Task.FromResult(exists);
+        var apiKey = await _context.UserApiKeys
+            .FirstOrDefaultAsync(k => k.Id == apiKeyId && k.UserId == userId);
+
+        if (apiKey == null)
+        {
+            return ServiceResult.Failed("API key not found.");
+        }
+
+        apiKey.IsActive = false;
+        await _context.SaveChangesAsync();
+
+        _logger.LogInformation("API key {ApiKeyId} revoked for user {UserId}", apiKeyId, userId);
+        return ServiceResult.Successful("API key revoked successfully.");
     }
 
-    public Task<Guid?> GetUserIdByApiKeyAsync(string apiKey)
+    public async Task<ServiceResult> DeleteApiKeyAsync(string userId, Guid apiKeyId)
     {
-        var key = _apiKeys.FirstOrDefault(k => k.Key == apiKey && k.IsActive);
-        return Task.FromResult(key?.UserId);
+        var apiKey = await _context.UserApiKeys
+            .FirstOrDefaultAsync(k => k.Id == apiKeyId && k.UserId == userId);
+
+        if (apiKey == null)
+        {
+            return ServiceResult.Failed("API key not found.");
+        }
+
+        _context.UserApiKeys.Remove(apiKey);
+        await _context.SaveChangesAsync();
+
+        _logger.LogInformation("API key {ApiKeyId} deleted for user {UserId}", apiKeyId, userId);
+        return ServiceResult.Successful("API key deleted successfully.");
     }
 
-    private static string GenerateSecureApiKey()
+    public async Task<int> GetApiKeyCountAsync(string userId)
     {
-        using var rng = RandomNumberGenerator.Create();
-        var bytes = new byte[32];
-        rng.GetBytes(bytes);
-        return Convert.ToBase64String(bytes).Replace("+", "-").Replace("/", "_").TrimEnd('=');
+        return await _context.UserApiKeys
+            .Where(k => k.UserId == userId && k.IsActive)
+            .CountAsync();
     }
+
+    private static int GetMaxApiKeysForPlan(PlanType planType) => planType switch
+    {
+        PlanType.Free => 1,
+        PlanType.Premium => 3,
+        PlanType.Pro => 10,
+        _ => 1
+    };
 }

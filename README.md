@@ -1,15 +1,15 @@
 # WorldCup API
 
-> An open data API for World Cup history, built with .NET 8 and Azure
+> An open data API for World Cup history, built with .NET 9 and Azure
 
-[![.NET](https://img.shields.io/badge/.NET-8.0-512BD4?style=flat-square&logo=dotnet)](https://dotnet.microsoft.com/)
+[![.NET](https://img.shields.io/badge/.NET-9.0-512BD4?style=flat-square&logo=dotnet)](https://dotnet.microsoft.com/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg?style=flat-square)](LICENSE)
 [![Build Status](https://img.shields.io/github/actions/workflow/status/afsvieira/worldcup-api/deploy.yml?style=flat-square)](https://github.com/afsvieira/worldcup-api/actions)
 [![Azure](https://img.shields.io/badge/Deployed%20on-Azure-0078D4?style=flat-square&logo=microsoft-azure)](https://azure.microsoft.com/)
 
 ## 🧭 Project Overview
 
-WorldCup API is a modern, open-source REST + GraphQL backend built with **.NET 8** and designed to demonstrate clean architecture, cloud deployment, and modern authentication practices.
+WorldCup API is a modern, open-source REST + GraphQL backend built with **.NET 9** and designed to demonstrate clean architecture, cloud deployment, and modern authentication practices.
 
 It provides structured, read-only access to historical data from all FIFA World Cup tournaments (both Men's and Women's), powered by a local SQLite database.
 
@@ -19,12 +19,12 @@ Although the dataset is static and not included in the public repository, the so
 
 | Category | Technologies |
 |----------|-------------|
-| **Backend** | .NET 8 (C#), Clean Architecture |
-| **Database** | Dapper + SQLite (read-only) |
-| **APIs** | REST API + GraphQL (HotChocolate) |
-| **Authentication** | Azure AD B2C (Google, Microsoft, GitHub) |
+| **Backend** | .NET 9 (C#), Clean Architecture |
+| **Database** | Dapper + SQLite (read-only), Entity Framework + Azure SQL |
+| **APIs** | REST API |
+| **Authentication** | ASP.NET Core Identity |
 | **Documentation** | Swagger / OpenAPI 3 |
-| **Cloud & DevOps** | Azure App Service, GitHub Actions |
+| **Cloud & DevOps** | Azure App Service, Azure SQL Database, GitHub Actions |
 | **Monitoring** | Azure Key Vault, Application Insights |
 
 ## 🧱 Project Architecture
@@ -34,20 +34,22 @@ WorldCup.sln
 │
 ├── src/
 │   ├── WorldCup.API/           → REST endpoints + Swagger + HealthCheck + API Key middleware
-│   ├── WorldCup.Identity/      → GraphQL endpoint + Azure AD B2C integration + API key service
+│   ├── WorldCup.Identity/      → ASP.NET Core Identity + User management + API key service
 │   ├── WorldCup.Application/   → Use cases + DTOs + business logic
 │   ├── WorldCup.Domain/        → Entities + enums + validation
 │   └── WorldCup.Infrastructure/ → Dapper repositories + database context
 │
-└── data/
-    └── worldcup_clean.db       → local SQLite dataset (not included in repo)
+├── data/
+│   └── worldcup_clean.db       → local SQLite dataset (not included in repo)
+└── scripts/
+    └── setup-azure-sql.ps1     → Azure SQL Database setup script
 ```
 
 ## 🚀 Getting Started
 
 ### Prerequisites
 
-- [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
+- [.NET 9 SDK](https://dotnet.microsoft.com/download/dotnet/9.0)
 - [Visual Studio 2022](https://visualstudio.microsoft.com/) or [VS Code](https://code.visualstudio.com/)
 - [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli) (for deployment)
 
@@ -64,10 +66,14 @@ WorldCup.sln
    dotnet restore
    ```
 
-3. **Configure user secrets** (for local development)
+3. **Setup Azure SQL Database** (for production)
    ```bash
-   dotnet user-secrets init --project src/WorldCup.API
-   dotnet user-secrets set "AzureAdB2C:ClientSecret" "your-client-secret" --project src/WorldCup.API
+   # Register SQL provider
+   az provider register --namespace Microsoft.Sql
+   
+   # Run setup script
+   cd scripts
+   .\setup-azure-sql.ps1
    ```
 
 4. **Run the application**
@@ -75,9 +81,16 @@ WorldCup.sln
    dotnet run --project src/WorldCup.API
    ```
 
-5. **Access the APIs**
+5. **Create and apply database migrations**
+   ```bash
+   cd src/WorldCup.Identity
+   dotnet ef migrations add InitialCreate
+   dotnet ef database update
+   ```
+
+6. **Access the APIs**
    - REST API: `https://localhost:7001/swagger`
-   - GraphQL: `https://localhost:7001/graphql`
+   - Identity Management: `https://localhost:7001`
    - Health Check: `https://localhost:7001/api/v1/health`
 
 ### Azure Deployment
@@ -86,16 +99,52 @@ The application is configured for automated deployment to Azure App Service usin
 
 ## 🔐 Authentication & Security
 
-- Users log in via **Azure AD B2C**, with social providers: **Google**, **Microsoft**, and **GitHub**
-- After authentication, users interact with the **GraphQL** endpoint to:
-  - Register their developer account (starts with **Free** plan)
+- Users register and log in via **ASP.NET Core Identity**
+- **Email verification** required for full account access (optional SMTP configuration)
+- After authentication, users can:
+  - Manage their developer account (starts with **Free** plan)
   - Generate and manage API Keys (respects plan limits)
   - View available subscription plans
 - All REST endpoints require the header:
   ```http
   Authorization: Bearer <API_KEY>
   ```
-- API Keys are encrypted and stored securely, with generation limits based on subscription plan
+- API Keys are encrypted and stored securely in Azure SQL Database, with generation limits based on subscription plan
+- Email verification system with professional HTML templates (see [Email Verification Guide](docs/EMAIL-VERIFICATION.md))
+
+## 📧 Email Configuration
+
+The application includes a complete email verification system with support for **Azure Communication Services** (recommended) or **SMTP**.
+
+### Option 1: Azure Communication Services (Recommended)
+
+1. **Use your existing Azure Communication Services** or create a new one
+2. **Get your connection string** from Azure Portal
+3. **Configure in User Secrets**:
+   ```bash
+   cd src/WorldCup.API
+   dotnet user-secrets set "Email:Provider" "Azure"
+   dotnet user-secrets set "Email:Azure:ConnectionString" "endpoint=https://...;accesskey=..."
+   dotnet user-secrets set "Email:Azure:FromEmail" "DoNotReply@xxx.azurecomm.net"
+   ```
+
+4. **When you register your domain**, configure custom domain in Azure for professional emails
+
+### Option 2: SMTP (Gmail - Development Only)
+
+1. **Create Gmail App Password**: [Instructions](https://support.google.com/accounts/answer/185833)
+2. **Configure in User Secrets**:
+   ```bash
+   cd src/WorldCup.API
+   dotnet user-secrets set "Email:Provider" "Smtp"
+   dotnet user-secrets set "Email:Smtp:Username" "your-email@gmail.com"
+   dotnet user-secrets set "Email:Smtp:Password" "your-app-password"
+   ```
+
+### Documentation
+
+- **Full Guide**: [Email Verification Documentation](docs/EMAIL-VERIFICATION.md)
+- **Note**: Email configuration is optional for development. The system works without it configured, but email verification features will be disabled.
 
 ## 📊 API Endpoints
 
@@ -106,8 +155,8 @@ The application is configured for automated deployment to Azure App Service usin
 - `GET /api/v1/matches` - List matches with filtering options
 - `GET /api/v1/players` - List players with search capabilities
 
-### GraphQL
-- User registration and authentication
+### Identity Management
+- User registration and authentication (ASP.NET Core Identity)
 - API key management (with plan validation)
 - Developer account operations
 - Subscription plan information
@@ -119,12 +168,12 @@ The application is configured for automated deployment to Azure App Service usin
 | 💲 **Price/month** | $0 | $9.99 CAD | $49.99 CAD |
 | ⚙️ **Requests/day** | 500 | 25,000 | 250,000 |
 | ⚡ **Requests/minute** | 10 | 100 | 1,000 |
-| 📄 **Endpoints** | REST (basic) | All REST | REST + GraphQL |
+| 📄 **Endpoints** | REST (basic) | All REST | All REST + Premium Support |
 | 🔑 **API Keys** | 1 | 3 | 10 |
 
 - **Free Plan**: Perfect for testing and small projects
 - **Premium Plan**: Ideal for production applications with moderate traffic
-- **Pro Plan**: Enterprise-grade access with full GraphQL capabilities
+- **Pro Plan**: Enterprise-grade access with premium support
 
 ## 🩺 Health & Versioning
 
@@ -152,7 +201,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🧑‍💻 About the Author
 
-This project is part of the personal portfolio of **Antonio Felipe Souza Vieira**, a **Full-Stack Developer** based in Canada, showcasing proficiency in modern .NET 8 architecture, GraphQL, Azure integration, and CI/CD automation.
+This project is part of the personal portfolio of **Antonio Felipe Souza Vieira**, a **Full-Stack Developer** based in Canada, showcasing proficiency in modern .NET 9 architecture, GraphQL, Azure integration, and CI/CD automation.
 
 **GitHub Profile**: [https://github.com/afsvieira](https://github.com/afsvieira)
 
