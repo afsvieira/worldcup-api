@@ -32,6 +32,9 @@
                                 <a href="#authentication" class="text-decoration-none">Authentication</a>
                             </li>
                             <li class="mb-2">
+                                <a href="#versioning" class="text-decoration-none">API Versioning</a>
+                            </li>
+                            <li class="mb-2">
                                 <a href="#endpoints" class="text-decoration-none">API Endpoints</a>
                             </li>
                             <li class="mb-2">
@@ -108,13 +111,73 @@
                     </div>
                 </div>
                 
+                <!-- API Versioning -->
+                <div id="versioning" class="mb-5">
+                    <h2 class="fw-bold mb-4">API Versioning</h2>
+                    <p class="lead">The WorldCup API uses URL path versioning to ensure backwards compatibility.</p>
+                    
+                    <div class="card border-0 shadow-sm mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold mb-3">Current Version: v1</h5>
+                            <p class="card-text mb-3">
+                                All endpoints are prefixed with <code>/api/v1/</code> to indicate the API version.
+                                This approach ensures that future versions can coexist without breaking existing integrations.
+                            </p>
+                            <div class="bg-dark p-3 rounded">
+                                <pre class="text-light mb-0"><code>https://api.worldcup.com/api/v1/stadiums
+https://api.worldcup.com/api/v1/teams
+https://api.worldcup.com/api/v1/tournaments</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="card border-0 shadow-sm h-100 border-start border-primary border-4">
+                                <div class="card-body">
+                                    <h6 class="fw-bold text-primary mb-2">
+                                        <i class="bi bi-shield-check me-2"></i>Stability Guarantee
+                                    </h6>
+                                    <p class="card-text small mb-0">
+                                        Once published, a version will not introduce breaking changes. 
+                                        New features may be added, but existing functionality remains stable.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card border-0 shadow-sm h-100 border-start border-success border-4">
+                                <div class="card-body">
+                                    <h6 class="fw-bold text-success mb-2">
+                                        <i class="bi bi-arrow-up-circle me-2"></i>Deprecation Policy
+                                    </h6>
+                                    <p class="card-text small mb-0">
+                                        When a new version is released, the previous version will be supported 
+                                        for at least 12 months before deprecation.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-info mt-4">
+                        <i class="bi bi-info-circle-fill me-2"></i>
+                        <strong>Tip:</strong> Always include the version in your base URL to ensure your application 
+                        continues to work when new versions are released.
+                    </div>
+                </div>
+                
                 <!-- API Endpoints -->
                 <div id="endpoints" class="mb-5">
                     <h2 class="fw-bold mb-4">API Endpoints</h2>
-                    <p class="lead mb-4">The WorldCup API provides the following endpoints:</p>
+                    <p class="lead mb-4">The WorldCup API provides the following endpoints organized by resource:</p>
                     
-                    <!-- Health Check -->
-                    <div class="card border-0 shadow-sm mb-3">
+                    <!-- Health Controller -->
+                    <h4 class="fw-bold mt-4 mb-3">
+                        <i class="bi bi-heart-pulse text-danger me-2"></i>
+                        Health Check
+                    </h4>
+                    <div class="card border-0 shadow-sm mb-4">
                         <div class="card-header bg-white">
                             <span class="badge bg-primary me-2">GET</span>
                             <code>/api/v1/health</code>
@@ -129,103 +192,81 @@
   "status": "Healthy",
   "environment": "Development",
   "uptime": "00:05:23",
-  "timestamp": "2025-11-12T10:30:00Z"
+  "timestamp": "2025-11-13T15:30:00Z"
 }</code></pre>
                             </div>
                         </div>
                     </div>
                     
-                    <!-- Tournaments -->
+                    <!-- Stadiums Controller -->
+                    <h4 class="fw-bold mt-4 mb-3">
+                        <i class="bi bi-building text-primary me-2"></i>
+                        Stadiums
+                    </h4>
+                    
                     <div class="card border-0 shadow-sm mb-3">
                         <div class="card-header bg-white">
                             <span class="badge bg-success me-2">GET</span>
-                            <code>/api/v1/tournaments</code>
+                            <code>/api/v1/stadiums</code>
                         </div>
                         <div class="card-body">
                             <p class="card-text">
-                                Retrieve a list of all FIFA World Cup tournaments.
+                                Retrieve a paginated list of stadiums that have hosted World Cup matches.
                             </p>
+                            <h6 class="fw-bold mb-2">Query Parameters:</h6>
+                            <ul class="small">
+                                <li><code>city</code> - Filter by city name (e.g., "Rio de Janeiro")</li>
+                                <li><code>country</code> - Filter by country (e.g., "Brazil")</li>
+                                <li><code>page</code> - Page number (default: 1)</li>
+                                <li><code>pageSize</code> - Items per page (default: 10, max: 100)</li>
+                            </ul>
                             <h6 class="fw-bold mb-2">Response Example:</h6>
                             <div class="bg-dark p-3 rounded">
                                 <pre class="text-light mb-0 small"><code>{
+  "success": true,
   "data": [
     {
-      "id": 1,
-      "year": 2022,
-      "hostCountry": "Qatar",
-      "winner": "Argentina",
-      "runnerUp": "France",
-      "totalMatches": 64
+      "id": 20,
+      "name": "Estádio do Maracanã",
+      "city": "Rio de Janeiro",
+      "country": "Brazil",
+      "capacity": 200000,
+      "stadiumWiki": "https://en.wikipedia.org/wiki/Maracanã_Stadium",
+      "cityWiki": "https://en.wikipedia.org/wiki/Rio_de_Janeiro"
     }
   ],
-  "count": 1
+  "pagination": {
+    "currentPage": 1,
+    "pageSize": 10,
+    "totalPages": 24,
+    "totalCount": 240
+  }
 }</code></pre>
                             </div>
                         </div>
                     </div>
                     
-                    <!-- Tournament Details -->
-                    <div class="card border-0 shadow-sm mb-3">
+                    <div class="card border-0 shadow-sm mb-4">
                         <div class="card-header bg-white">
                             <span class="badge bg-success me-2">GET</span>
-                            <code>/api/v1/tournaments/{id}</code>
+                            <code>/api/v1/stadiums/{id}</code>
                         </div>
                         <div class="card-body">
                             <p class="card-text">
-                                Get detailed information about a specific tournament including all matches.
+                                Get detailed information about a specific stadium by ID.
                             </p>
-                        </div>
-                    </div>
-                    
-                    <!-- Teams -->
-                    <div class="card border-0 shadow-sm mb-3">
-                        <div class="card-header bg-white">
-                            <span class="badge bg-success me-2">GET</span>
-                            <code>/api/v1/teams</code>
-                        </div>
-                        <div class="card-body">
-                            <p class="card-text">
-                                Retrieve information about all national teams that have participated in World Cup tournaments.
-                            </p>
-                        </div>
-                    </div>
-                    
-                    <!-- Matches -->
-                    <div class="card border-0 shadow-sm mb-3">
-                        <div class="card-header bg-white">
-                            <span class="badge bg-success me-2">GET</span>
-                            <code>/api/v1/matches</code>
-                        </div>
-                        <div class="card-body">
-                            <p class="card-text">
-                                Search and filter World Cup matches with various parameters.
-                            </p>
-                            <h6 class="fw-bold mb-2">Query Parameters:</h6>
-                            <ul>
-                                <li><code>tournamentId</code> - Filter by tournament</li>
-                                <li><code>teamId</code> - Filter by team</li>
-                                <li><code>year</code> - Filter by year</li>
+                            <h6 class="fw-bold mb-2">Path Parameters:</h6>
+                            <ul class="small">
+                                <li><code>id</code> - Stadium ID (integer)</li>
                             </ul>
                         </div>
                     </div>
                     
-                    <!-- Players -->
-                    <div class="card border-0 shadow-sm">
-                        <div class="card-header bg-white">
-                            <span class="badge bg-success me-2">GET</span>
-                            <code>/api/v1/players</code>
-                        </div>
-                        <div class="card-body">
-                            <p class="card-text">
-                                Search through historical player data with filtering capabilities.
-                            </p>
-                            <h6 class="fw-bold mb-2">Query Parameters:</h6>
-                            <ul>
-                                <li><code>name</code> - Search by player name</li>
-                                <li><code>country</code> - Filter by country</li>
-                                <li><code>tournamentId</code> - Filter by tournament</li>
-                            </ul>
-                        </div>
+                    <!-- More controllers will be added here as implemented -->
+                    <div class="alert alert-info">
+                        <i class="bi bi-info-circle me-2"></i>
+                        <strong>Coming Soon:</strong> Teams, Tournaments, Matches, Players, and more endpoints are being implemented.
+                        Check back regularly for updates!
                     </div>
                 </div>
                 

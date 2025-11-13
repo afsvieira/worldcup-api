@@ -38,6 +38,9 @@ data/
 *.csv
 *.json
 
+# Planning documents (internal use only)
+.planning/
+
 # Scripts with credentials
 scripts/
 
