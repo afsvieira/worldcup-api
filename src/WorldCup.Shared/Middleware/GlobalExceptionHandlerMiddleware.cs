@@ -51,37 +51,38 @@ public class GlobalExceptionHandlerMiddleware
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
-        var errorResponse = new ErrorResponse
+        var errorResponse = new
         {
-            StatusCode = context.Response.StatusCode,
-            Message = "An unexpected error occurred while processing your request.",
-            Type = "InternalServerError"
+            error = new
+            {
+                code = "INTERNAL_ERROR",
+                message = _environment.IsDevelopment() 
+                    ? exception.Message 
+                    : "An unexpected error occurred. Please try again later or contact support if the problem persists.",
+                statusCode = context.Response.StatusCode,
+                details = _environment.IsDevelopment() 
+                    ? new[]
+                    {
+                        new
+                        {
+                            field = "exception",
+                            issue = exception.GetType().Name
+                        }
+                    }
+                    : null,
+                // Only expose technical details in Development
+                stackTrace = _environment.IsDevelopment() ? exception.StackTrace : null,
+                innerException = _environment.IsDevelopment() ? exception.InnerException?.Message : null
+            }
         };
-
-        // Include detailed error information only in Development
-        if (_environment.IsDevelopment())
-        {
-            errorResponse.Details = exception.Message;
-            errorResponse.StackTrace = exception.StackTrace;
-            errorResponse.InnerException = exception.InnerException?.Message;
-        }
 
         var jsonResponse = JsonSerializer.Serialize(errorResponse, new JsonSerializerOptions
         {
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-            WriteIndented = _environment.IsDevelopment()
+            WriteIndented = _environment.IsDevelopment(),
+            DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
         });
 
         await context.Response.WriteAsync(jsonResponse);
-    }
-
-    private class ErrorResponse
-    {
-        public int StatusCode { get; set; }
-        public string Message { get; set; } = string.Empty;
-        public string Type { get; set; } = string.Empty;
-        public string? Details { get; set; }
-        public string? StackTrace { get; set; }
-        public string? InnerException { get; set; }
     }
 }

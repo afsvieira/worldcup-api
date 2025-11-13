@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\WorldCup.Domain\WorldCup.Domain.csproj" />
+    <ProjectReference Include="..\WorldCup.Application\WorldCup.Application.csproj" />
   </ItemGroup>
 
   <ItemGroup>

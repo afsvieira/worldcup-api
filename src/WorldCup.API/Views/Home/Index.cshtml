@@ -15,7 +15,7 @@
                     Access comprehensive historical data from all FIFA World Cup tournaments through a modern, 
                     well-documented REST API. Built with .NET 9 and deployed on Azure.
                 </p>
-                <div class="d-flex gap-3 flex-wrap">
+                <div class="d-flex gap-3 flex-wrap flex-column flex-sm-row">
                     <a asp-controller="Account" asp-action="Register" class="btn btn-primary btn-lg">
                         <i class="bi bi-person-plus"></i> Get Started Free
                     </a>
@@ -27,7 +27,7 @@
                     </a>
                 </div>
             </div>
-            <div class="col-lg-5 text-center mt-4 mt-lg-0">
+            <div class="col-lg-5 text-center mt-4 mt-lg-0 d-none d-lg-block">
                 <div class="code-preview bg-black p-4 rounded shadow">
                     <pre class="text-start text-light mb-0"><code>curl -X GET "https://api.worldcup.com/api/v1/tournaments" \
   -H "Authorization: Bearer YOUR_API_KEY"
@@ -302,7 +302,7 @@
                                     <p class="text-muted mb-2">
                                         Use your API key in the Authorization header to start fetching data.
                                     </p>
-                                    <div class="bg-dark p-3 rounded">
+                                    <div class="bg-dark p-3 rounded overflow-auto d-none d-sm-block">
                                         <pre class="text-light mb-0 small"><code>curl -X GET "https://api.worldcup.com/api/v1/tournaments" \
   -H "Authorization: Bearer YOUR_API_KEY"</code></pre>
                                     </div>
@@ -337,7 +337,7 @@
         <p class="lead mb-4">
             Join developers worldwide using WorldCup API to build amazing applications
         </p>
-        <div class="d-flex gap-3 justify-content-center flex-wrap">
+        <div class="d-flex gap-3 justify-content-center flex-wrap flex-column flex-sm-row">
             <a asp-controller="Account" asp-action="Register" class="btn btn-light btn-lg">
                 <i class="bi bi-person-plus"></i> Create Free Account
             </a>

@@ -9,7 +9,7 @@
 
 ## 🧭 Project Overview
 
-WorldCup API is a modern, open-source REST + GraphQL backend built with **.NET 9** and designed to demonstrate clean architecture, cloud deployment, and modern authentication practices.
+WorldCup API is a modern, open-source REST API backend built with **.NET 9** and designed to demonstrate clean architecture, cloud deployment, and modern authentication practices.
 
 It provides structured, read-only access to historical data from all FIFA World Cup tournaments (both Men's and Women's), powered by a local SQLite database.
 
@@ -20,7 +20,8 @@ Although the dataset is static and not included in the public repository, the so
 | Category | Technologies |
 |----------|-------------|
 | **Backend** | .NET 9 (C#), Clean Architecture |
-| **Database** | Dapper + SQLite (read-only), Entity Framework + Azure SQL |
+| **Database** | Entity Framework Core + Azure SQL Database |
+| **Caching** | Redis (Azure Cache for Redis) |
 | **APIs** | REST API |
 | **Authentication** | ASP.NET Core Identity |
 | **Documentation** | Swagger / OpenAPI 3 |
@@ -37,12 +38,11 @@ WorldCup.sln
 │   ├── WorldCup.Identity/      → ASP.NET Core Identity + User management + API key service
 │   ├── WorldCup.Application/   → Use cases + DTOs + business logic
 │   ├── WorldCup.Domain/        → Entities + enums + validation
-│   └── WorldCup.Infrastructure/ → Dapper repositories + database context
+│   └── WorldCup.Infrastructure/ → EF Core DbContext + repositories + Redis cache
 │
-├── data/
-│   └── worldcup_clean.db       → local SQLite dataset (not included in repo)
-└── scripts/
-    └── setup-azure-sql.ps1     → Azure SQL Database setup script
+├── docs/                       → Documentation files
+└── data/
+    └── README.md               → Data source documentation
 ```
 
 ## 🚀 Getting Started
@@ -66,29 +66,19 @@ WorldCup.sln
    dotnet restore
    ```
 
-3. **Setup Azure SQL Database** (for production)
-   ```bash
-   # Register SQL provider
-   az provider register --namespace Microsoft.Sql
-   
-   # Run setup script
-   cd scripts
-   .\setup-azure-sql.ps1
-   ```
-
-4. **Run the application**
+3. **Run the application**
    ```bash
    dotnet run --project src/WorldCup.API
    ```
 
-5. **Create and apply database migrations**
+4. **Create and apply database migrations**
    ```bash
    cd src/WorldCup.Identity
    dotnet ef migrations add InitialCreate
    dotnet ef database update
    ```
 
-6. **Access the APIs**
+5. **Access the APIs**
    - REST API: `https://localhost:7001/swagger`
    - Identity Management: `https://localhost:7001`
    - Health Check: `https://localhost:7001/api/v1/health`
@@ -190,9 +180,9 @@ The application includes a complete email verification system with support for *
 ## 🧩 Future Enhancements
 
 - [ ] Add user dashboard (Next.js + Azure Static Web Apps) for API key management
-- [ ] Add rate limiting per API key
-- [ ] Add usage analytics (queries per endpoint, top countries)
-- [ ] Publish public GraphQL schema documentation
+- [ ] Add rate limiting per API key using Redis
+- [ ] Add usage analytics with Redis (queries per endpoint, top countries)
+- [ ] Implement distributed caching for frequently accessed data
 - [ ] Expand dataset with images (players, stadiums, flags)
 
 ## 📄 License
